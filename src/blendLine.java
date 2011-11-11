@@ -51,7 +51,7 @@ public class blendLine extends PApplet {
 		float f = 0.95f;
 		float k1 = 0.01f;
 		float k2 = 0.54f;
-		stroke(0.73f, 1.0f, 1.0f, 0.06f);
+		stroke(0.73f, 1.0f, 1.0f, 0.12f);
 		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE); // this takes care of the
 													// blending
 		// blend(0, 0, width, height, 0, 0, width, height, BLEND);

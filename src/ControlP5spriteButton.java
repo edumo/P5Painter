@@ -1,47 +1,23 @@
-import processing.core.*;
-import processing.xml.*;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
+import processing.core.PApplet;
+import processing.core.PGraphics;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
 import art.dudito.ColorManager;
 import art.dudito.Const;
 import art.dudito.PencilManager;
-import art.dudito.pencils.RealisticSpray;
 import art.dudito.pencils.Pencil;
-import art.dudito.pencils.SimpleLine;
-import art.dudito.pencils.SimplePoint;
-import art.dudito.pencils.Spray;
-import art.dudito.pencils.Techi;
-import controlP5.*;
-
-import java.applet.*;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.FocusEvent;
-import java.awt.Image;
-import java.io.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.regex.*;
-
 import codeanticode.glgraphics.GLConstants;
-import codeanticode.glgraphics.GLGraphicsOffScreen;
+import controlP5.Button;
+import controlP5.ControlEvent;
+import controlP5.ControlGroup;
+import controlP5.ControlP5;
+import controlP5.ControllerSprite;
 
 public class ControlP5spriteButton extends PApplet {
-
-	/**
-	 * ControlP5 SpriteButton
-	 * 
-	 * IMPORTANT !! ControlerSprite is yet experimental and will undergo changes
-	 * and modifications. required png images are included in the data folder of
-	 * thius sketch.
-	 * 
-	 * by andreas schlegel, 2009
-	 */
 
 	ControlP5 controlP5;
 
@@ -65,8 +41,7 @@ public class ControlP5spriteButton extends PApplet {
 	Map<Integer, TuioCursor> tuios = new HashMap<Integer, TuioCursor>();
 
 	public void setup() {
-		size(1024, 768,OPENGL);
-		// size(1024, 768, GLConstants.GLGRAPHICS);
+		size(1024, 768, GLConstants.GLGRAPHICS);
 		hint(ENABLE_OPENGL_4X_SMOOTH);
 		hint(ENABLE_ACCURATE_TEXTURES);
 		hint(ENABLE_NATIVE_FONTS);
@@ -106,7 +81,7 @@ public class ControlP5spriteButton extends PApplet {
 
 		background(0);
 
-		tuio = new TuioProcessing(this);
+		tuio = new TuioProcessing(this, 3333);
 	}
 
 	// called when a cursor is added to the scene
@@ -127,7 +102,7 @@ public class ControlP5spriteButton extends PApplet {
 					+ tcur.getSessionID() + ") " + tcur.getX() + " "
 					+ tcur.getY() + " " + tcur.getMotionSpeed() + " "
 					+ tcur.getMotionAccel());
-		
+
 		tuios.put(tcur.getCursorID(), tcur);
 	}
 
@@ -149,7 +124,7 @@ public class ControlP5spriteButton extends PApplet {
 
 		paintBuffer.stroke(255);
 		paintBuffer.strokeWeight(10);
- 
+
 		if (mousePressed) {
 			currentPencil[0].setColor(colorManager.color.toARGB());
 			currentPencil[0].draw(mouseX, mouseY);
@@ -168,7 +143,7 @@ public class ControlP5spriteButton extends PApplet {
 				TuioCursor cursor = tuios.get(i);
 				if (cursor == null) {
 					currentPencil[i].stop();
-					
+
 				} else {
 					currentPencil[i].setColor(colorManager.color.toARGB());
 					currentPencil[i].draw((int) cursor.getScreenX(1024),
@@ -194,8 +169,8 @@ public class ControlP5spriteButton extends PApplet {
 			int[][] coords2 = { { tuioX, tuioY, MouseEvent.MOUSE_RELEASED } };
 			controlP5.controlWindow.multitouch(coords2);
 		}
-		
-		if(mousePressed){
+
+		if (mousePressed) {
 			int[][] coords = { { mouseX, mouseY, MouseEvent.MOUSE_PRESSED } };
 			controlP5.controlWindow.multitouch(coords);
 			int[][] coords2 = { { mouseX, mouseY, MouseEvent.MOUSE_RELEASED } };

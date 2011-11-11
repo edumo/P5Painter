@@ -59,7 +59,7 @@ public class ColorManager {
 			MyControllerSprite sprite = new MyControllerSprite(controlP5,
 					applet.loadImage("buttonSprite.png"), Const.BUTTON_SIZE,
 					Const.BUTTON_SIZE);
-			
+
 			sprite.setImage(applet.loadImage("trazo.png"));
 
 			sprite.button = b;

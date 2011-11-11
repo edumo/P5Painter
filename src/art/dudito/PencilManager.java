@@ -15,8 +15,6 @@ import processing.core.PGraphics;
 import art.dudito.gui.MyControllerSprite;
 import art.dudito.pencils.Pencil;
 import art.dudito.pencils.RealisticSpray;
-import art.dudito.pencils.SimpleLine;
-import art.dudito.pencils.SimplePoint;
 import art.dudito.pencils.Spray;
 import art.dudito.pencils.Techi;
 
@@ -25,7 +23,7 @@ public class PencilManager {
 	public static String PREFIX = "color";
 
 	Map<Button, Pencil[]> pencils = new HashMap<Button, Pencil[]>();
-	
+
 	List<Pencil[]> pencils2 = new ArrayList<Pencil[]>();
 
 	PGraphics paintBuffer;
@@ -75,60 +73,46 @@ public class PencilManager {
 		pencils2.add(pencil);
 
 	}
-	
-	
 
 	public Pencil[] initPencils() {
-		
+
 		pencilsGroup = controlP5.addGroup("Pencil-Group", -100, 20);
 
 		Pencil[] pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
-			pencils[i] = new Spray(applet, paintBuffer, "spray1.png");
-		}
-		add(pencils);
-		
-		pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
-			pencils[i] = new RealisticSpray(applet, paintBuffer);
-		}
-		add(pencils);
-		
-		pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
-			pencils[i] = new Techi(applet, paintBuffer);
-		}
-		add(pencils);
-		
-		pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
+		for (int i = 0; i < 12; i++) {
 			pencils[i] = new Spray(applet, paintBuffer, "trazo.png");
 		}
 		add(pencils);
-		
+
 		pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
-			pencils[i] = new Spray(applet, paintBuffer, "spray1.png");
-		}
-		add(pencils);
-		
-		pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
-			pencils[i] = new Spray(applet, paintBuffer, "spray2.png");
-		}
-		add(pencils);
-		
-		pencils = new Pencil[12];
-		for(int i = 0; i< 12;i++){
+		for (int i = 0; i < 12; i++) {
 			pencils[i] = new Spray(applet, paintBuffer, "spray3.png");
 		}
 		add(pencils);
-		
+
+		pencils = new Pencil[12];
+		for (int i = 0; i < 12; i++) {
+			pencils[i] = new RealisticSpray(applet, paintBuffer, "trazo2.png");
+		}
+		add(pencils);
+
+		pencils = new Pencil[12];
+		for (int i = 0; i < 12; i++) {
+			pencils[i] = new Spray(applet, paintBuffer, "spray1.png");
+		}
+		add(pencils);
+
+		pencils = new Pencil[12];
+		for (int i = 0; i < 12; i++) {
+			pencils[i] = new Techi(applet, paintBuffer);
+		}
+		add(pencils);
+
 		return pencils;
 	}
 
 	public Pencil[] selectPencil(Button b) {
-		
+
 		return pencils.get(b);
 	}
 

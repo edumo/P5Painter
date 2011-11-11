@@ -30,12 +30,12 @@ public class RealisticSpray implements Pencil {
 
 	PVector last = new PVector(-1, -1);
 
-	public RealisticSpray(PApplet applet, PGraphics graphics) {
+	public RealisticSpray(PApplet applet, PGraphics graphics, String trazoName) {
 		super();
 		this.graphics = graphics;
 		this.applet = applet;
 
-		trazo = applet.loadImage("trazo2.png");
+		trazo = applet.loadImage(trazoName);
 		current = trazo.get();
 		trazo.resize(size, size);
 	}
@@ -129,7 +129,7 @@ public class RealisticSpray implements Pencil {
 	@Override
 	public void backGroundDraw() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

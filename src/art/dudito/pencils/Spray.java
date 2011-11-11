@@ -27,7 +27,6 @@ public class Spray implements Pencil {
 	int color = 255;
 
 	PImage trazo = null;
-	PImage trazo2 = null;
 
 	ColorDrop[] drops, delDrops;
 	int dropFactor = 0;
@@ -40,9 +39,6 @@ public class Spray implements Pencil {
 		trazo = applet.loadImage(trazoPath);
 		trazo.resize(size, size);
 		
-		trazo2 = applet.loadImage("spray3.png");
-		trazo2.resize(size, size);
-
 		drops = new ColorDrop[0];
 		delDrops = new ColorDrop[0];
 	}
@@ -175,8 +171,6 @@ public class Spray implements Pencil {
 		graphics.translate(mouseX, mouseY);
 		graphics.rotate(applet.radians(applet.random(360)));
 		graphics.imageMode(PApplet.CENTER);
-		graphics.tint(color, alpha/2);
-		graphics.image(trazo2, 0, 0);
 		graphics.tint(color, alpha);
 		graphics.image(trazo, 0, 0);
 		graphics.popMatrix();

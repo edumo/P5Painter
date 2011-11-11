@@ -1,9 +1,7 @@
-package art.dudito;
+package edumo.p5.wall;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import art.dudito.gui.MyControllerSprite;
 
 import processing.core.PApplet;
 
@@ -12,6 +10,7 @@ import controlP5.CColor;
 import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.ControllerSprite;
+import edumo.p5.wall.gui.MyControllerSprite;
 
 import toxi.color.ColorList;
 import toxi.color.ColorRange;

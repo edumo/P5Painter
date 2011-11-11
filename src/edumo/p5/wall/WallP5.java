@@ -1,3 +1,5 @@
+package edumo.p5.wall;
+
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,10 +8,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
-import art.dudito.ColorManager;
-import art.dudito.Const;
-import art.dudito.PencilManager;
-import art.dudito.pencils.Pencil;
+import edumo.p5.wall.pencils.Pencil;
 import codeanticode.glgraphics.GLConstants;
 import controlP5.Button;
 import controlP5.ControlEvent;
@@ -17,7 +16,7 @@ import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.ControllerSprite;
 
-public class ControlP5spriteButton extends PApplet {
+public class WallP5 extends PApplet {
 
 	ControlP5 controlP5;
 
@@ -69,7 +68,7 @@ public class ControlP5spriteButton extends PApplet {
 				guiY, 50, 220);
 		b.setSprite(sprite);
 
-		b = controlP5.addButton("play", 102, guiX + 140, guiY, 50, 220);
+		b = controlP5.addButton("stop", 102, guiX + 140, guiY, 50, 220);
 		b.setSprite(sprite);
 
 		colorsGroup = controlP5.addGroup("Color-Group", width - 150, 20);
@@ -119,7 +118,7 @@ public class ControlP5spriteButton extends PApplet {
 
 		// paintBuffer.beginDraw();
 
-		hint(ENABLE_DEPTH_TEST);
+		// hint(ENABLE_DEPTH_TEST);
 		pushMatrix();
 
 		paintBuffer.stroke(255);
@@ -139,7 +138,7 @@ public class ControlP5spriteButton extends PApplet {
 		// }
 
 		if (!tuios.isEmpty()) {
-			for (int i = 0; i < 12; i++) {
+			for (int i = 0; i < tuios.size(); i++) {
 				TuioCursor cursor = tuios.get(i);
 				if (cursor == null) {
 					currentPencil[i].stop();
@@ -230,6 +229,6 @@ public class ControlP5spriteButton extends PApplet {
 
 	static public void main(String args[]) {
 		PApplet.main(new String[] { "--present", "--bgcolor=#F0F0F0",
-				"ControlP5spriteButton" });
+				"edumo.p5.wall.WallP5" });
 	}
 }

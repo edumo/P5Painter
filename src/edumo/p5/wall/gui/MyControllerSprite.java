@@ -1,4 +1,4 @@
-package art.dudito.gui;
+package edumo.p5.wall.gui;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -31,7 +31,7 @@ public class MyControllerSprite extends ControllerSprite {
 		applet.ellipse(-3, -3, button.getWidth() + 6, button.getHeight() + 6);
 
 		if (tint) {
-			// CHAPUZEEEEOOOOO esto es para botones con diseño
+			// CHAPUZEEEEOOOOO esto es para botones con diseï¿½o
 			applet.tint(button.getColor().getBackground(), 255);
 			// applet.imageMode(PApplet.CENTER);
 			applet.image(image, -3, -3);

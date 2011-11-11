@@ -1,4 +1,4 @@
-package art.dudito.gui;
+package edumo.p5.wall.gui;
 
 import processing.core.PApplet;
 import controlP5.Button;

@@ -1,4 +1,4 @@
-package art.dudito;
+package edumo.p5.wall;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +12,11 @@ import controlP5.ControlP5;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-import art.dudito.gui.MyControllerSprite;
-import art.dudito.pencils.Pencil;
-import art.dudito.pencils.RealisticSpray;
-import art.dudito.pencils.Spray;
-import art.dudito.pencils.Techi;
+import edumo.p5.wall.gui.MyControllerSprite;
+import edumo.p5.wall.pencils.Pencil;
+import edumo.p5.wall.pencils.RealisticSpray;
+import edumo.p5.wall.pencils.Spray;
+import edumo.p5.wall.pencils.Techi;
 
 public class PencilManager {
 

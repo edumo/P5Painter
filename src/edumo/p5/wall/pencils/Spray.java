@@ -1,9 +1,10 @@
-package art.dudito.pencils;
+package edumo.p5.wall.pencils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import art.dudito.Const;
+import edumo.p5.wall.Const;
+
 
 import processing.core.PApplet;
 import processing.core.PGraphics;

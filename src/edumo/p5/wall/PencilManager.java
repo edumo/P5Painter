@@ -66,7 +66,7 @@ public class PencilManager {
 
 		sprite.tint = false;
 		sprite.button = b;
-		b.setSprite(sprite);
+//		b.setSprite(sprite);
 		b.setGroup(pencilsGroup);
 
 		pencils.put(b, pencil);

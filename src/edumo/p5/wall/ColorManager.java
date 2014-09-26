@@ -9,7 +9,6 @@ import controlP5.Button;
 import controlP5.CColor;
 import controlP5.ControlGroup;
 import controlP5.ControlP5;
-import controlP5.ControllerSprite;
 import edumo.p5.wall.gui.MyControllerSprite;
 
 import toxi.color.ColorList;
@@ -45,24 +44,24 @@ public class ColorManager {
 
 	public ColorManager(PApplet applet, ControlP5 controlP5, ControlGroup g) {
 
-		// MyControllerSprite sprite = new MyControllerSprite(controlP5,
-		// applet.loadImage("buttonSprite.png"), 75, 75);
-		// sprite.setMask(applet.loadImage("buttonSpriteMask.png"));
-		// sprite.enableMask();
+		MyControllerSprite sprite = new MyControllerSprite(controlP5,
+				applet.loadImage("buttonSprite.png"), 75, 75);
+		sprite.setMask(applet.loadImage("buttonSpriteMask.png"));
+		sprite.enableMask();
 
 		g.setPosition(applet.width, 0);
 
 		for (int index = 0; index < NUMCOLORS; index++) {
 			controlP5.Button b = controlP5.addButton(PREFIX + "-" + index, 0,
 					-25, offset + index * (size + margin), size, size);
-			MyControllerSprite sprite = new MyControllerSprite(controlP5,
-					applet.loadImage("buttonSprite.png"), Const.BUTTON_SIZE,
-					Const.BUTTON_SIZE);
+//			MyControllerSprite sprite = new MyControllerSprite(controlP5,
+//					applet.loadImage("buttonSprite.png"), Const.BUTTON_SIZE,
+//					Const.BUTTON_SIZE);
 
 			sprite.setImage(applet.loadImage("trazo.png"));
 
 			sprite.button = b;
-			b.setSprite(sprite);
+//			b.setSprite(sprite);
 			b.setGroup(g);
 			cButtons.add(b);
 		}

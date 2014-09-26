@@ -4,7 +4,6 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import controlP5.Button;
 import controlP5.ControlP5;
-import controlP5.ControllerSprite;
 
 public class MyControllerSprite extends ControllerSprite {
 
@@ -23,7 +22,6 @@ public class MyControllerSprite extends ControllerSprite {
 		this.image.resize(width, height);
 	}
 
-	@Override
 	public void draw(PApplet applet) {
 		// super.draw(arg0);
 		applet.pushStyle();

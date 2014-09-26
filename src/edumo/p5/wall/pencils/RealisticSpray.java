@@ -7,8 +7,6 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;
-import toxi.geom.Spline2D;
-import toxi.geom.Vec2D;
 
 public class RealisticSpray implements Pencil {
 

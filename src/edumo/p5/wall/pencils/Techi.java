@@ -1,7 +1,6 @@
 package edumo.p5.wall.pencils;
 
 import processing.core.*;
-import processing.xml.*;
 
 import toxi.geom.*;
 import toxi.physics.ParticleString;

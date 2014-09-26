@@ -8,13 +8,12 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
+import edumo.p5.wall.gui.ControllerSprite;
 import edumo.p5.wall.pencils.Pencil;
-import codeanticode.glgraphics.GLConstants;
 import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlGroup;
 import controlP5.ControlP5;
-import controlP5.ControllerSprite;
 
 public class WallP5 extends PApplet {
 
@@ -40,9 +39,9 @@ public class WallP5 extends PApplet {
 	Map<Integer, TuioCursor> tuios = new HashMap<Integer, TuioCursor>();
 
 	public void setup() {
-		size(1024, 768, GLConstants.GLGRAPHICS);
-		hint(ENABLE_OPENGL_4X_SMOOTH);
-		hint(ENABLE_ACCURATE_TEXTURES);
+		size(1024, 768, OPENGL);
+//		hint(ENABLE_OPENGL_4X_SMOOTH);
+//		hint(ENABLE_ACCURATE_TEXTURES);
 		hint(ENABLE_NATIVE_FONTS);
 		smooth();
 		frameRate(60);
@@ -66,10 +65,10 @@ public class WallP5 extends PApplet {
 
 		Button b = controlP5.addButton("play", Const.NEW_COLORS, guiX + 80,
 				guiY, 50, 220);
-		b.setSprite(sprite);
+//		b.setSprite(sprite);
 
 		b = controlP5.addButton("stop", 102, guiX + 140, guiY, 50, 220);
-		b.setSprite(sprite);
+//		b.setSprite(sprite);
 
 		colorsGroup = controlP5.addGroup("Color-Group", width - 150, 20);
 

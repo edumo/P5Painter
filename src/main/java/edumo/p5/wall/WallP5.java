@@ -4,8 +4,16 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import netP5.NetAddress;
+import oscP5.OscMessage;
+import oscP5.OscP5;
+
+import com.thomasdiewald.pixelflow.java.DwPixelFlow;
+import com.thomasdiewald.pixelflow.java.imageprocessing.filter.DwFilter;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.opengl.PGraphics2D;
 import spout.Spout;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
@@ -48,11 +56,75 @@ public class WallP5 extends PApplet {
 	CornerPinSurface surface;
 	
 	boolean calibrating = false;
+	
+	DwPixelFlow context;
+
+	DwFilter filter;
+
+	PGraphics2D pg_src_A;
+
+	PGraphics2D pg_src_B;
+	PGraphics2D pg_src_C; // just another buffer for temporary results
+	
+	OscP5 oscP5;
+	
+	boolean draw = false;
+	
+	int xRight = 0;
+	int yRight = 0;
+	
+	int xLeft = 0;
+	int yLeft = 0;
 
 	@Override
 	public void settings() {
-		size(1024, 768, P3D);
+		size(1920, 1080, P3D);
 	}
+	
+	public void setupOSC() {
+
+		/* start oscP5, listening for incoming messages at port 12000 */
+		oscP5 = new OscP5(this, 9000);
+
+		/*
+		 * myRemoteLocation is a NetAddress. a NetAddress takes 2 parameters, an
+		 * ip address and a port number. myRemoteLocation is used as parameter
+		 * in oscP5.send() when sending osc packets to another computer, device,
+		 * application. usage see below. for testing purposes the listening port
+		 * and the port of the remote location address are the same, hence you
+		 * will send messages back to this sketch.
+		 */
+		//myRemoteLocation = new NetAddress("127.0.0.1", 12002);
+	}
+	
+
+	/* incoming osc message are forwarded to the oscEvent method. */
+	public void oscEvent(OscMessage theOscMessage) {
+		/* print the address pattern and the typetag of the received OscMessage */
+		// print((millis()-time)+"### received an osc message.");
+		print(" addrpattern: " + theOscMessage.addrPattern());
+		// println(" typetag: "+theOscMessage.typetag());
+		// time = millis();
+		if (theOscMessage.addrPattern().contains("pressed")) {
+			draw = true;
+		}
+		if (theOscMessage.addrPattern().contains("released")) {
+			draw = false;
+		}
+
+		if (theOscMessage.addrPattern().contains("position")) {
+			float x = theOscMessage.get(0).floatValue();
+			float y = theOscMessage.get(1).floatValue();
+			println(x, y);
+
+			xRight = (int) map(x, -1f, 1f, 0, width);
+			yRight = (int) map(y, 1.2f, 0f, 0, height);
+			
+			xLeft = (int) map(x, -1f, 1f, 0, width);
+			yLeft = (int) map(y, 1.2f, 0f, 0, height);
+		}
+	}
+
 
 	public void setup() {
 
@@ -104,6 +176,24 @@ public class WallP5 extends PApplet {
 
 		ks = new Keystone(this);
 		surface = ks.createCornerPinSurface(width, height, 20);
+		
+		
+		context = new DwPixelFlow(this);
+		context.print();
+		context.printGL();
+
+		filter = new DwFilter(context);
+
+		pg_src_A = (PGraphics2D) createGraphics(width, height, P2D);
+		pg_src_A.smooth(8);
+
+
+		pg_src_B = (PGraphics2D) createGraphics(width, height, P2D);
+		pg_src_B.smooth(8);
+
+		pg_src_C = (PGraphics2D) createGraphics(width, height, P2D);
+		pg_src_C.smooth(8);
+
 
 	}
 
@@ -161,17 +251,9 @@ public class WallP5 extends PApplet {
 		// currentPencil.stop();
 		// }
 
-		if (!tuios.isEmpty()) {
-			for (int i = 0; i < tuios.size(); i++) {
-				TuioCursor cursor = tuios.get(i);
-				if (cursor == null) {
-					currentPencil[i].stop();
-
-				} else {
-					currentPencil[i].setColor(colorManager.color.toARGB());
-					currentPencil[i].draw((int) cursor.getScreenX(1024), (int) cursor.getScreenY(768));
-				}
-			}
+		if (draw) {
+			currentPencil[0].draw(xRight, yRight);
+			currentPencil[0].draw(xRight, yRight);
 		}
 
 		pencilManager.backGroundDraw();
@@ -206,9 +288,36 @@ public class WallP5 extends PApplet {
 		paintBuffer.popMatrix();
 		// hint(DISABLE_DEPTH_TEST);
 		paintBuffer.endDraw();
+		
+		pg_src_A.beginDraw();
+		pg_src_A.background(0,0);
+		pg_src_A.image(paintBuffer,0,0);
+		pg_src_A.endDraw();
 
+		
+		pg_src_B.beginDraw();
+		pg_src_B.clear();
+		pg_src_B.endDraw();
+
+		DwFilter filter = DwFilter.get(context);
+
+		filter.bloom.param.mult = map(mouseX, 0, width, 0, 20);
+		filter.bloom.param.radius = map(mouseY, 0, height, 0, 1);
+
+		filter.luminance_threshold.param.threshold = 0.3f;
+		filter.luminance_threshold.param.exponent = 10;
+
+		// System.out.println("mult/radius: "+filter.bloom.param.mult+"/"+filter.bloom.param.radius);
+		if (!keyPressed) {
+			filter.bloom.apply(pg_src_A, pg_src_A, null);
+		} else {
+			filter.luminance_threshold.apply(pg_src_A, pg_src_B);
+			filter.bloom.apply(pg_src_B, pg_src_B, pg_src_A);
+		}
+
+		
 		// image(paintBuffer, 0, 0);
-		surface.render(paintBuffer);
+		surface.render(pg_src_A);
 
 	}
 

@@ -70,11 +70,11 @@ public class ColorDrop {
 	}
 
 	public void drawDrop() {
-		applet.noStroke();
-		applet.fill(colorDrop, 255 - (int) (posY / lengthDrop * 200));
-		applet.strokeWeight(1);
-		applet.ellipseMode(PApplet.CENTER);
-		applet.ellipse(initPosX, initPosY + posY, diameterDrop,
+		graphics.noStroke();
+		graphics.fill(colorDrop, 255 - (int) (posY / lengthDrop * 200));
+		graphics.strokeWeight(1);
+		graphics.ellipseMode(PApplet.CENTER);
+		graphics.ellipse(initPosX, initPosY + posY, diameterDrop,
 				diameterDrop * 2);
 	}
 }

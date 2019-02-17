@@ -104,5 +104,4 @@ public class PencilManager {
 			pencil[0].backGroundDraw();
 		}
 	}
-
 }

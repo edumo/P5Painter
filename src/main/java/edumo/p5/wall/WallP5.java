@@ -15,6 +15,8 @@ import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlGroup;
 import controlP5.ControlP5;
+import deadpixel.keystone.CornerPinSurface;
+import deadpixel.keystone.Keystone;
 
 public class WallP5 extends PApplet {
 
@@ -38,20 +40,25 @@ public class WallP5 extends PApplet {
 	boolean tuioPressed = false;
 
 	Map<Integer, TuioCursor> tuios = new HashMap<Integer, TuioCursor>();
-	
+
 	Spout spout;
 	PGraphics videoSpout = null;
+
+	Keystone ks;
+	CornerPinSurface surface;
+	
+	boolean calibrating = false;
 
 	@Override
 	public void settings() {
 		size(1024, 768, P3D);
 	}
-	
+
 	public void setup() {
-		
-//		hint(ENABLE_OPENGL_4X_SMOOTH);
-//		hint(ENABLE_ACCURATE_TEXTURES);
-//		hint(ENABLE_NATIVE_FONTS);
+
+		// hint(ENABLE_OPENGL_4X_SMOOTH);
+		// hint(ENABLE_ACCURATE_TEXTURES);
+		// hint(ENABLE_NATIVE_FONTS);
 		smooth();
 		frameRate(60);
 
@@ -61,26 +68,24 @@ public class WallP5 extends PApplet {
 		// paintBuffer.hint(ENABLE_ACCURATE_TEXTURES);
 		// paintBuffer.hint(ENABLE_NATIVE_FONTS);
 
-		//paintBuffer = g;
+		// paintBuffer = g;
 		paintBuffer = createGraphics(width, height, P3D);
 		guiY = height - 100;
-		
+
 		videoSpout = createGraphics(width, height, P2D);
 
 		controlP5 = new ControlP5(this);
 		controlP5.setAutoDraw(true);
 
-		ControllerSprite sprite = new ControllerSprite(controlP5,
-				loadImage("buttonSprite.png"), 75, 75);
+		ControllerSprite sprite = new ControllerSprite(controlP5, loadImage("buttonSprite.png"), 75, 75);
 		sprite.setMask(loadImage("buttonSpriteMask.png"));
 		sprite.enableMask();
 
-		Button b = controlP5.addButton("play", Const.NEW_COLORS, guiX + 80,
-				guiY, 50, 220);
-//		b.setSprite(sprite);
+		Button b = controlP5.addButton("play", Const.NEW_COLORS, guiX + 80, guiY, 50, 220);
+		// b.setSprite(sprite);
 
 		b = controlP5.addButton("stop", 102, guiX + 140, guiY, 50, 220);
-//		b.setSprite(sprite);
+		// b.setSprite(sprite);
 
 		colorsGroup = controlP5.addGroup("Color-Group", width - 150, 20);
 
@@ -88,22 +93,24 @@ public class WallP5 extends PApplet {
 
 		pencilManager = new PencilManager(this, paintBuffer);
 		currentPencil = pencilManager.initPencils();
-		
+
 		currentPencil = pencilManager.selectPencil("Techi");
-		
 
 		background(0);
 
 		tuio = new TuioProcessing(this, 3333);
-		
-		  spout = new Spout(this);
+
+		spout = new Spout(this);
+
+		ks = new Keystone(this);
+		surface = ks.createCornerPinSurface(width, height, 20);
+
 	}
 
 	// called when a cursor is added to the scene
 	public void addTuioCursor(TuioCursor tcur) {
 		if (tcur.getX() != 0) {
-			println("add cursor " + tcur.getCursorID() + " ("
-					+ tcur.getSessionID() + ") " + tcur.getX() + " "
+			println("add cursor " + tcur.getCursorID() + " (" + tcur.getSessionID() + ") " + tcur.getX() + " "
 					+ tcur.getY());
 			tuios.put(tcur.getCursorID(), tcur);
 			tuioPressed = true;
@@ -113,10 +120,8 @@ public class WallP5 extends PApplet {
 	// called when a cursor is moved
 	public void updateTuioCursor(TuioCursor tcur) {
 		if (tcur.getX() != 0)
-			println("update cursor " + tcur.getCursorID() + " ("
-					+ tcur.getSessionID() + ") " + tcur.getX() + " "
-					+ tcur.getY() + " " + tcur.getMotionSpeed() + " "
-					+ tcur.getMotionAccel());
+			println("update cursor " + tcur.getCursorID() + " (" + tcur.getSessionID() + ") " + tcur.getX() + " "
+					+ tcur.getY() + " " + tcur.getMotionSpeed() + " " + tcur.getMotionAccel());
 
 		tuios.put(tcur.getCursorID(), tcur);
 	}
@@ -124,27 +129,26 @@ public class WallP5 extends PApplet {
 	// called when a cursor is removed from the scene
 	public void removeTuioCursor(TuioCursor tcur) {
 		if (tcur.getX() != 0)
-			println("remove cursor " + tcur.getCursorID() + " ("
-					+ tcur.getSessionID() + ")");
+			println("remove cursor " + tcur.getCursorID() + " (" + tcur.getSessionID() + ")");
 		tuios.remove(tcur.getCursorID());
 	}
 
 	public void draw() {
-		 background(0);
-		 
-		 spout.receiveTexture(videoSpout);
-		 
-		 image(videoSpout,0,0);
+		background(0);
 
-		 paintBuffer.beginDraw();
+		spout.receiveTexture(videoSpout);
+
+		image(videoSpout, 0, 0);
+
+		paintBuffer.beginDraw();
 
 		// hint(ENABLE_DEPTH_TEST);
-		 paintBuffer.pushMatrix();
+		paintBuffer.pushMatrix();
 
 		paintBuffer.stroke(255);
 		paintBuffer.strokeWeight(10);
 
-		if (mousePressed) {
+		if (mousePressed && !calibrating) {
 			currentPencil[0].setColor(colorManager.color.toARGB());
 			currentPencil[0].draw(mouseX, mouseY);
 		} else {
@@ -165,8 +169,7 @@ public class WallP5 extends PApplet {
 
 				} else {
 					currentPencil[i].setColor(colorManager.color.toARGB());
-					currentPencil[i].draw((int) cursor.getScreenX(1024),
-							(int) cursor.getScreenY(768));
+					currentPencil[i].draw((int) cursor.getScreenX(1024), (int) cursor.getScreenY(768));
 				}
 			}
 		}
@@ -184,16 +187,16 @@ public class WallP5 extends PApplet {
 		if (tuioPressed) {
 
 			int[][] coords = { { tuioX, tuioY, MouseEvent.MOUSE_PRESSED } };
-			//controlP5.controlWindow.multitouch(coords);
+			// controlP5.controlWindow.multitouch(coords);
 			int[][] coords2 = { { tuioX, tuioY, MouseEvent.MOUSE_RELEASED } };
-			//controlP5.controlWindow.multitouch(coords2);
+			// controlP5.controlWindow.multitouch(coords2);
 		}
 
 		if (mousePressed) {
 			int[][] coords = { { mouseX, mouseY, MouseEvent.MOUSE_PRESSED } };
-			//controlP5.controlWindow.multitouch(coords);
+			// controlP5.controlWindow.multitouch(coords);
 			int[][] coords2 = { { mouseX, mouseY, MouseEvent.MOUSE_RELEASED } };
-			//controlP5.controlWindow.multitouch(coords2);
+			// controlP5.controlWindow.multitouch(coords2);
 		}
 
 		// pushStyle();
@@ -201,20 +204,39 @@ public class WallP5 extends PApplet {
 		// popStyle();
 
 		paintBuffer.popMatrix();
-		//hint(DISABLE_DEPTH_TEST);
+		// hint(DISABLE_DEPTH_TEST);
 		paintBuffer.endDraw();
-		
-		image(paintBuffer,0,0);
+
+		// image(paintBuffer, 0, 0);
+		surface.render(paintBuffer);
 
 	}
 
 	private void newColors() {
 
 	}
-	
+
 	@Override
 	public void keyPressed() {
 		currentPencil = pencilManager.nextPencil();
+		switch (key) {
+		case 'c':
+			// enter/leave calibration mode, where surfaces can be warped
+			// and moved
+			ks.toggleCalibration();
+			calibrating = !calibrating;
+			break;
+
+		case 'l':
+			// loads the saved layout
+			ks.load();
+			break;
+
+		case 's':
+			// saves the layout
+			ks.save();
+			break;
+		}
 	}
 
 	public void play(int theValue) {
@@ -230,18 +252,16 @@ public class WallP5 extends PApplet {
 
 	public void controlEvent(ControlEvent theEvent) {
 		if (theEvent.isGroup()) {
-			println("got an event from group " + theEvent.group().getName()
-					+ ", isOpen? " + theEvent.group().isOpen());
+			println("got an event from group " + theEvent.group().getName() + ", isOpen? " + theEvent.group().isOpen());
 		} else if (theEvent.isController()) {
-			println("got something from a controller "
-					+ theEvent.controller().getName());
+			println("got something from a controller " + theEvent.controller().getName());
 
 			String name = theEvent.controller().getName();
 
-			//Pencil[] tempPencil = pencilManager.selectPencil((Button) theEvent
-		//			.controller());
-//			if (tempPencil != null)
-//				currentPencil = tempPencil;
+			// Pencil[] tempPencil = pencilManager.selectPencil((Button) theEvent
+			// .controller());
+			// if (tempPencil != null)
+			// currentPencil = tempPencil;
 
 			if (name.startsWith(ColorManager.PREFIX)) {
 
@@ -256,7 +276,6 @@ public class WallP5 extends PApplet {
 	}
 
 	static public void main(String args[]) {
-		PApplet.main(new String[] { "--present", "--bgcolor=#F0F0F0",
-				"edumo.p5.wall.WallP5" });
+		PApplet.main(new String[] { "--present", "--bgcolor=#F0F0F0", "edumo.p5.wall.WallP5" });
 	}
 }

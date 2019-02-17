@@ -48,8 +48,8 @@ public class Techi implements Pencil {
 		super();
 		this.applet = applet;
 		this.graphics = graphics;
-		applet.ellipseMode(PApplet.CENTER);
-		applet.rectMode(PApplet.CENTER);
+		graphics.ellipseMode(PApplet.CENTER);
+		graphics.rectMode(PApplet.CENTER);
 
 		initPhysics();
 
@@ -68,7 +68,7 @@ public class Techi implements Pencil {
 
 			for (int i = 0; i < physics.springs.size(); i++) {
 				VerletSpring spring = physics.springs.get(i);
-				applet.line(spring.a.x, spring.a.y, spring.a.z, spring.b.x,
+				graphics.line(spring.a.x, spring.a.y, spring.a.z, spring.b.x,
 						spring.b.y, spring.b.z);
 			}
 		} else {
@@ -78,10 +78,10 @@ public class Techi implements Pencil {
 				graphics.ellipse(physics.particles.get(i).x,
 						physics.particles.get(i).y, 2, 2);
 			}
-			applet.strokeWeight(1);
+			graphics.strokeWeight(1);
 			for (int i = 0; i < physics.springs.size(); i++) {
 				VerletSpring spring = physics.springs.get(i);
-				applet.line(spring.a.x, spring.a.y, spring.a.z, spring.b.x,
+				graphics.line(spring.a.x, spring.a.y, spring.a.z, spring.b.x,
 						spring.b.y, spring.b.z);
 			}
 

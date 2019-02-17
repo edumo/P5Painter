@@ -6,6 +6,7 @@ import java.util.Map;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import spout.Spout;
 import TUIO.TuioCursor;
 import TUIO.TuioProcessing;
 import edumo.p5.wall.gui.ControllerSprite;
@@ -37,6 +38,9 @@ public class WallP5 extends PApplet {
 	boolean tuioPressed = false;
 
 	Map<Integer, TuioCursor> tuios = new HashMap<Integer, TuioCursor>();
+	
+	Spout spout;
+	PGraphics videoSpout = null;
 
 	@Override
 	public void settings() {
@@ -60,6 +64,8 @@ public class WallP5 extends PApplet {
 		//paintBuffer = g;
 		paintBuffer = createGraphics(width, height, P3D);
 		guiY = height - 100;
+		
+		videoSpout = createGraphics(width, height, P2D);
 
 		controlP5 = new ControlP5(this);
 		controlP5.setAutoDraw(true);
@@ -89,6 +95,8 @@ public class WallP5 extends PApplet {
 		background(0);
 
 		tuio = new TuioProcessing(this, 3333);
+		
+		  spout = new Spout(this);
 	}
 
 	// called when a cursor is added to the scene
@@ -123,6 +131,10 @@ public class WallP5 extends PApplet {
 
 	public void draw() {
 		 background(0);
+		 
+		 spout.receiveTexture(videoSpout);
+		 
+		 image(videoSpout,0,0);
 
 		 paintBuffer.beginDraw();
 
